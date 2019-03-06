@@ -11,6 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  colormap
+  roslib
 )
 
 ## System dependencies are found with CMake's conventions
@@ -103,9 +105,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES lidar_segmentation
-#  CATKIN_DEPENDS roscpp rospy std_msgs
+  INCLUDE_DIRS include
+  LIBRARIES clustering
+  CATKIN_DEPENDS roscpp rospy std_msgs colormap roslib
 #  DEPENDS system_lib
 )
 
@@ -116,14 +118,16 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
   ${catkin_INCLUDE_DIRS}
+  include
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/lidar_segmentation.cpp
 # )
+add_library(clustering src/clustering.cpp src/main.cpp src/groundtruth.cpp src/visualization_rviz.cpp)
+
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -134,6 +138,8 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/lidar_segmentation_node.cpp)
+add_executable(lidar_segmentation src/main.cpp src/clustering.cpp src/visualization_rviz.cpp src/groundtruth.cpp)
+
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -149,6 +155,11 @@ include_directories(
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+target_link_libraries(lidar_segmentation ${catkin_LIBRARIES})
+target_link_libraries(clustering
+        ${catkin_LIBRARIES}
+        ${roscpp_LIBRARIES}
+)
 
 #############
 ## Install ##
