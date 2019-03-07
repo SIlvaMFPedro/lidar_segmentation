@@ -61,6 +61,8 @@
 
   <build_depend>colormap</build_depend>
   <build_export_depend>colormap</build_export_depend>
+  <exec_depend>colormap</exec_depend>
+
   <build_depend>roslib</build_depend>
   <build_export_depend>roslib</build_export_depend>
 
